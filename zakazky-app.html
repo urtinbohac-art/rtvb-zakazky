@@ -11,9 +11,9 @@
   --bg: #111110;
   --bg2: #1a1a18;
   --bg3: #222220;
-  --red: #c0392b;
-  --red-light: #e74c3c;
-  --red-dim: rgba(192,57,43,0.15);
+  --red: #8B1A10;
+  --red-light: #A52010;
+  --red-dim: rgba(139,26,16,0.18);
   --white: #f5f3ef;
   --white-dim: rgba(245,243,239,0.65);
   --white-faint: rgba(245,243,239,0.08);
@@ -28,27 +28,26 @@ body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--white)
 
 /* HEADER */
 header{
-  background:var(--bg);
-  border-bottom:1px solid var(--border);
+  background:var(--red);
+  border-bottom:none;
   padding:0 28px;
-  height:56px;
+  height:68px;
   display:flex;
   align-items:center;
   justify-content:space-between;
   flex-shrink:0;
-  position:relative;
 }
-header::after{content:'';position:absolute;bottom:0;left:28px;right:28px;height:1px;background:linear-gradient(90deg,transparent,var(--red) 30%,var(--red) 70%,transparent);opacity:0.5}
 
-.logo{
-  font-family:'Cormorant Garamond',serif;
-  font-size:1.25rem;
-  font-weight:500;
-  letter-spacing:0.04em;
-  color:var(--white);
+.logo{display:flex;align-items:center;gap:18px}
+.logo-img{height:42px;width:auto;display:block}
+.logo-tag{
+  font-family:'Montserrat',sans-serif;
+  font-size:0.58rem;font-weight:600;
+  letter-spacing:0.22em;text-transform:uppercase;
+  color:rgba(255,255,255,0.45);
+  border-left:1px solid rgba(255,255,255,0.2);
+  padding-left:18px;
 }
-.logo-amp{color:var(--red);font-style:italic;margin:0 2px}
-.logo-sub{font-family:'Montserrat',sans-serif;font-size:0.6rem;font-weight:300;letter-spacing:0.18em;text-transform:uppercase;color:var(--white-dim);margin-left:2px;vertical-align:middle}
 
 /* LAYOUT */
 .app{display:flex;flex:1;overflow:hidden}
@@ -161,7 +160,7 @@ header::after{content:'';position:absolute;bottom:0;left:28px;right:28px;height:
 .chat{flex:1;display:flex;flex-direction:column;min-width:0;background:var(--bg)}
 
 .chat-head{
-  height:56px;padding:0 28px;border-bottom:1px solid var(--border);
+  height:68px;padding:0 28px;border-bottom:1px solid var(--border);
   display:flex;align-items:center;gap:10px;flex-shrink:0;
 }
 .ch-title{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:500;color:var(--white)}
@@ -246,8 +245,8 @@ header::after{content:'';position:absolute;bottom:0;left:28px;right:28px;height:
 
 <header>
   <div class="logo">
-    Vrzáková<span class="logo-amp">&</span>Boháč
-    <span class="logo-sub">Zakázky</span>
+    <img class="logo-img" src="https://vrzakova-bohac.cz/wp-content/uploads/2025/05/Logo-VB-WHITE-2-LINES-BGR-orez.png" alt="Vrzáková & Boháč">
+    <span class="logo-tag">Zakázky</span>
   </div>
 </header>
 
@@ -335,7 +334,7 @@ header::after{content:'';position:absolute;bottom:0;left:28px;right:28px;height:
         <textarea id="userInput" rows="1" placeholder="Napište zprávu nebo jen odešlete — Claude zpracuje podklady automaticky…" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
         <button class="send-btn" id="sendBtn" onclick="send()">↑</button>
       </div>
-      <div class="input-hint">Enter = nový řádek &nbsp;·&nbsp; Ctrl+Enter = odeslat</div>
+      <div class="input-hint">Enter = odeslat &nbsp;·&nbsp; Shift+Enter = nový řádek</div>
     </div>
   </div>
 </div>
@@ -435,7 +434,7 @@ function renderFiles(){
 }
 function rmFile(i){files.splice(i,1);renderFiles()}
 
-function handleKey(e){if(e.ctrlKey&&e.key==='Enter'){e.preventDefault();send()}}
+function handleKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send()}}
 function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,110)+'px'}
 
 function newConv(){
