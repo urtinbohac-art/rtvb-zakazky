@@ -247,9 +247,7 @@ header::after{content:'';position:absolute;bottom:0;left:28px;right:28px;height:
     <div class="s-section">
       <div class="s-label">Připojení</div>
       <div class="api-box">
-        <div class="api-status"><span class="dot" id="apiDot"></span><span id="apiStatusText">API klíč není uložen</span></div>
-        <input type="password" class="api-input" id="apiKeyInput" placeholder="sk-ant-api03-…">
-        <button class="api-btn" onclick="saveApiKey()">Uložit</button>
+        <div class="api-status"><span class="dot ok" id="apiDot"></span><span id="apiStatusText">Připojeno přes server</span></div>
       </div>
     </div>
 
@@ -371,17 +369,9 @@ function getSys(){
   return 'Jsi asistent realitního týmu Vrzáková & Boháč. Pomáháš s čímkoliv k zakázce. Odpovídej v češtině, profesionálně.';
 }
 
-if(apiKey){document.getElementById('apiKeyInput').value=apiKey;setApiStatus(true)}
-
-function saveApiKey(){
-  const v=document.getElementById('apiKeyInput').value.trim();
-  if(!v)return;
-  apiKey=v;localStorage.setItem('vb_api_key',v);setApiStatus(true);
-}
-
 function setApiStatus(ok){
   document.getElementById('apiDot').className='dot'+(ok?' ok':'');
-  document.getElementById('apiStatusText').textContent=ok?'Připojeno':'API klíč není uložen';
+  document.getElementById('apiStatusText').textContent=ok?'Připojeno přes server':'Chyba připojení';
 }
 
 function setWf(type,btn){
@@ -430,7 +420,7 @@ function newConv(){
 }
 
 async function send(){
-  if(loading||!apiKey){if(!apiKey)alert('Nejprve uložte API klíč.');return}
+  if(loading)return
   const inp=document.getElementById('userInput');
   const txt=inp.value.trim();
   const content=[];
@@ -448,7 +438,7 @@ async function send(){
   const tid=showThinking();
   loading=true;document.getElementById('sendBtn').disabled=true;
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{
+    const res=await fetch('/api/chat',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:4000,system:getSys(),messages:history})
