@@ -441,7 +441,7 @@ async function send(){
     const res=await fetch('https://rtvb-zakazky.vercel.app/api/chat',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:4000,system:getSys(),messages:history})
+      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:4000,system:getSys(),messages:history})
     });
     if(!res.ok){const e=await res.json();throw new Error(e.error?.message||'Chyba API')}
     const data=await res.json();
