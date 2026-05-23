@@ -137,6 +137,17 @@ header::after{content:'';position:absolute;bottom:0;left:28px;right:28px;height:
 .file-rm{background:none;border:none;color:rgba(245,243,239,0.3);cursor:pointer;font-size:0.85rem;padding:0;transition:color 0.15s}
 .file-rm:hover{color:var(--red)}
 
+/* MODEL SELECT */
+.model-select{
+  width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:5px;
+  padding:8px 10px;font-family:'Montserrat',sans-serif;font-size:0.72rem;
+  color:var(--white);outline:none;cursor:pointer;appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='rgba(245,243,239,0.3)'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 10px center;
+}
+.model-select:focus{border-color:var(--red)}
+.model-select option{background:var(--bg3);color:var(--white)}
+
 /* NEW */
 .new-btn{
   width:100%;padding:9px;border:1px solid var(--border-strong);background:transparent;
@@ -282,6 +293,13 @@ header::after{content:'';position:absolute;bottom:0;left:28px;right:28px;height:
     </div>
 
     <div class="s-section">
+      <div class="s-label">Model</div>
+      <select class="model-select" id="modelSelect" onchange="model=this.value">
+        <option disabled selected>Načítám…</option>
+      </select>
+    </div>
+
+    <div class="s-section">
       <div class="s-label">Podklady</div>
       <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
         <div class="drop-icon">↑</div>
@@ -332,6 +350,7 @@ const API_URL = 'https://rtvb-zakazky.urtin-bohac.workers.dev';
 
 let apiKey = localStorage.getItem('vb_api_key')||'';
 let wf = 'inzerat';
+let model = 'claude-sonnet-4-6';
 let history = [];
 let files = [];
 let loading = false;
@@ -392,42 +411,21 @@ dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('over')})
 dz.addEventListener('dragleave',()=>dz.classList.remove('over'));
 dz.addEventListener('drop',e=>{e.preventDefault();dz.classList.remove('over');handleFiles(e.dataTransfer.files)});
 
-async function compressImage(file){
-  const MAX=1600,Q=0.82;
-  return new Promise(res=>{
-    const img=new Image(),url=URL.createObjectURL(file);
-    img.onload=()=>{
-      URL.revokeObjectURL(url);
-      let{width:w,height:h}=img;
-      if(w>MAX){h=Math.round(h*MAX/w);w=MAX;}
-      const c=document.createElement('canvas');c.width=w;c.height=h;
-      c.getContext('2d').drawImage(img,0,0,w,h);
-      c.toBlob(blob=>{
-        const r=new FileReader();
-        r.onload=()=>res({b64:r.result.split(',')[1],type:'image/jpeg',size:blob.size});
-        r.readAsDataURL(blob);
-      },'image/jpeg',Q);
-    };
-    img.src=url;
-  });
-}
 function toB64(f){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result.split(',')[1]);r.onerror=rej;r.readAsDataURL(f)})}
 function fmtSize(b){return b<1024?b+' B':b<1048576?(b/1024).toFixed(0)+' KB':(b/1048576).toFixed(1)+' MB'}
 function totalPayload(){return files.reduce((a,f)=>a+Math.round(f.b64.length*0.75),0)}
 async function handleFiles(fl){
   for(const f of fl){
     if(files.find(x=>x.name===f.name))continue;
-    let b64,type=f.type,size=f.size;
-    if(f.type.startsWith('image/')){const c=await compressImage(f);b64=c.b64;type=c.type;size=c.size;}
-    else{b64=await toB64(f);}
-    files.push({name:f.name,b64,type,size});
+    const b64=await toB64(f);
+    files.push({name:f.name,b64,type:f.type,size:f.size});
     renderFiles();
   }
 }
 function renderFiles(){
   const total=totalPayload();
   const warn=total>40*1048576;
-  const sizeBar=files.length?`<div style="font-size:0.62rem;color:${warn?'var(--red-light)':'rgba(245,243,239,0.3)'};padding:4px 2px;margin-top:2px">Celkem: ${fmtSize(total)}${warn?' – blízko limitu 4,5 MB':''}</div>`:'';
+  const sizeBar=files.length?`<div style="font-size:0.62rem;color:${warn?'var(--red-light)':'rgba(245,243,239,0.3)'};padding:4px 2px;margin-top:2px">Celkem: ${fmtSize(total)}${warn?' – blízko limitu':''}</div>`:'';
   document.getElementById('fileList').innerHTML=files.map((f,i)=>`
     <div class="file-item">
       <span class="file-name" title="${f.name}">${f.name}</span>
@@ -456,7 +454,7 @@ async function send(){
   const txt=inp.value.trim();
   const payload=totalPayload();
   if(payload>50*1048576){
-    addMsg('assistant',`⚠️ Soubory jsou příliš velké (${fmtSize(payload)}). Limit je cca 4 MB. Zkuste odebrat největší PDF nebo nahrát méně souborů najednou.`);
+    addMsg('assistant',`⚠️ Soubory jsou příliš velké (${fmtSize(payload)}). Zkuste odebrat největší soubor nebo nahrát méně souborů najednou.`);
     return;
   }
   const content=[];
@@ -477,7 +475,7 @@ async function send(){
     const res=await fetch(API_URL,{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:4000,system:getSys(),messages:history})
+      body:JSON.stringify({model,max_tokens:4000,system:getSys(),messages:history})
     });
     if(!res.ok){const e=await res.json();throw new Error(e.error?.message||'Chyba API')}
     const data=await res.json();
@@ -524,7 +522,31 @@ function showThinking(){
 }
 function removeThinking(id){document.getElementById(id)?.remove()}
 
+async function loadModels(){
+  const sel=document.getElementById('modelSelect');
+  try{
+    const res=await fetch(API_URL,{method:'GET'});
+    if(!res.ok)throw new Error('HTTP '+res.status);
+    const data=await res.json();
+    const models=(data.data||[]).filter(m=>m.id.startsWith('claude-'));
+    if(!models.length)throw new Error('empty');
+    sel.innerHTML=models.map(m=>{
+      const label=m.display_name||m.id;
+      const def=m.id.includes('sonnet');
+      return `<option value="${m.id}"${def?' selected':''}>${label}</option>`;
+    }).join('');
+    model=sel.value;
+  }catch(e){
+    sel.innerHTML=`
+      <option value="claude-sonnet-4-6" selected>Claude Sonnet 4.6</option>
+      <option value="claude-opus-4-5">Claude Opus 4.5</option>
+      <option value="claude-haiku-4-5">Claude Haiku 4.5</option>`;
+    model='claude-sonnet-4-6';
+  }
+}
+
 loadInstrukce();
+loadModels();
 </script>
 </body>
 </html>
