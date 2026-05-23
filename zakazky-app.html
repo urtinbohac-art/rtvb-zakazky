@@ -426,7 +426,7 @@ async function handleFiles(fl){
 }
 function renderFiles(){
   const total=totalPayload();
-  const warn=total>3.5*1048576;
+  const warn=total>40*1048576;
   const sizeBar=files.length?`<div style="font-size:0.62rem;color:${warn?'var(--red-light)':'rgba(245,243,239,0.3)'};padding:4px 2px;margin-top:2px">Celkem: ${fmtSize(total)}${warn?' – blízko limitu 4,5 MB':''}</div>`:'';
   document.getElementById('fileList').innerHTML=files.map((f,i)=>`
     <div class="file-item">
@@ -455,7 +455,7 @@ async function send(){
   const inp=document.getElementById('userInput');
   const txt=inp.value.trim();
   const payload=totalPayload();
-  if(payload>4*1048576){
+  if(payload>50*1048576){
     addMsg('assistant',`⚠️ Soubory jsou příliš velké (${fmtSize(payload)}). Limit je cca 4 MB. Zkuste odebrat největší PDF nebo nahrát méně souborů najednou.`);
     return;
   }
