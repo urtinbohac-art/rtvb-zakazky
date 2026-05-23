@@ -326,6 +326,10 @@ header::after{content:'';position:absolute;bottom:0;left:28px;right:28px;height:
 const GITHUB_BASE = 'https://raw.githubusercontent.com/urtinbohac-art/rtvb-zakazky/main/';
 const URLS = { inzerat: GITHUB_BASE+'instrukce-inzerat.md', karta: GITHUB_BASE+'instrukce-karta.md' };
 
+// ← SEM DOSAĎTE URL vašeho Cloudflare Workeru po nasazení
+// Formát: https://rtvb-zakazky.VÁŠE-JMÉNO.workers.dev
+const API_URL = 'https://rtvb-zakazky.urtin-bohac.workers.dev';
+
 let apiKey = localStorage.getItem('vb_api_key')||'';
 let wf = 'inzerat';
 let history = [];
@@ -388,21 +392,48 @@ dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('over')})
 dz.addEventListener('dragleave',()=>dz.classList.remove('over'));
 dz.addEventListener('drop',e=>{e.preventDefault();dz.classList.remove('over');handleFiles(e.dataTransfer.files)});
 
+async function compressImage(file){
+  const MAX=1600,Q=0.82;
+  return new Promise(res=>{
+    const img=new Image(),url=URL.createObjectURL(file);
+    img.onload=()=>{
+      URL.revokeObjectURL(url);
+      let{width:w,height:h}=img;
+      if(w>MAX){h=Math.round(h*MAX/w);w=MAX;}
+      const c=document.createElement('canvas');c.width=w;c.height=h;
+      c.getContext('2d').drawImage(img,0,0,w,h);
+      c.toBlob(blob=>{
+        const r=new FileReader();
+        r.onload=()=>res({b64:r.result.split(',')[1],type:'image/jpeg',size:blob.size});
+        r.readAsDataURL(blob);
+      },'image/jpeg',Q);
+    };
+    img.src=url;
+  });
+}
+function toB64(f){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result.split(',')[1]);r.onerror=rej;r.readAsDataURL(f)})}
+function fmtSize(b){return b<1024?b+' B':b<1048576?(b/1024).toFixed(0)+' KB':(b/1048576).toFixed(1)+' MB'}
+function totalPayload(){return files.reduce((a,f)=>a+Math.round(f.b64.length*0.75),0)}
 async function handleFiles(fl){
   for(const f of fl){
     if(files.find(x=>x.name===f.name))continue;
-    const b64=await toB64(f);
-    files.push({name:f.name,b64,type:f.type});
+    let b64,type=f.type,size=f.size;
+    if(f.type.startsWith('image/')){const c=await compressImage(f);b64=c.b64;type=c.type;size=c.size;}
+    else{b64=await toB64(f);}
+    files.push({name:f.name,b64,type,size});
     renderFiles();
   }
 }
-function toB64(f){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result.split(',')[1]);r.onerror=rej;r.readAsDataURL(f)})}
 function renderFiles(){
+  const total=totalPayload();
+  const warn=total>3.5*1048576;
+  const sizeBar=files.length?`<div style="font-size:0.62rem;color:${warn?'var(--red-light)':'rgba(245,243,239,0.3)'};padding:4px 2px;margin-top:2px">Celkem: ${fmtSize(total)}${warn?' – blízko limitu 4,5 MB':''}</div>`:'';
   document.getElementById('fileList').innerHTML=files.map((f,i)=>`
     <div class="file-item">
       <span class="file-name" title="${f.name}">${f.name}</span>
+      <span style="font-size:0.62rem;color:var(--white-dim);flex-shrink:0;margin-right:4px">${fmtSize(f.size||Math.round(f.b64.length*0.75))}</span>
       <button class="file-rm" onclick="rmFile(${i})">×</button>
-    </div>`).join('');
+    </div>`).join('')+sizeBar;
 }
 function rmFile(i){files.splice(i,1);renderFiles()}
 
@@ -423,6 +454,11 @@ async function send(){
   if(loading)return
   const inp=document.getElementById('userInput');
   const txt=inp.value.trim();
+  const payload=totalPayload();
+  if(payload>4*1048576){
+    addMsg('assistant',`⚠️ Soubory jsou příliš velké (${fmtSize(payload)}). Limit je cca 4 MB. Zkuste odebrat největší PDF nebo nahrát méně souborů najednou.`);
+    return;
+  }
   const content=[];
   for(const f of files){
     if(f.type==='application/pdf')content.push({type:'document',source:{type:'base64',media_type:'application/pdf',data:f.b64}});
@@ -438,7 +474,7 @@ async function send(){
   const tid=showThinking();
   loading=true;document.getElementById('sendBtn').disabled=true;
   try{
-    const res=await fetch('https://rtvb-zakazky.vercel.app/api/chat',{
+    const res=await fetch(API_URL,{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:4000,system:getSys(),messages:history})
