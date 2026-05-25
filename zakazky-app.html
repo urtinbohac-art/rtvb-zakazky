@@ -510,9 +510,34 @@ function setModel(id, btn){
 }
 
 // ── CENA ────────────────────────────────────────────────
+const PRICE_FALLBACK = {
+  opus:   {input:15,   output:75},
+  sonnet: {input:3,    output:15},
+  haiku:  {input:0.8,  output:4},
+};
+
+function getPricing(modelId){
+  // Přesná shoda z OpenRouteru
+  if(pricing[modelId]) return pricing[modelId];
+  // Fuzzy — hledáme podle rodiny v klíčích OpenRouteru
+  const keys = Object.keys(pricing);
+  for(const fam of ['opus','sonnet','haiku']){
+    if(modelId.includes(fam)){
+      const match = keys.find(k=>k.includes(fam));
+      if(match) return pricing[match];
+      break;
+    }
+  }
+  // Pevná záloha
+  for(const fam of ['opus','sonnet','haiku']){
+    if(modelId.includes(fam)) return PRICE_FALLBACK[fam];
+  }
+  return null;
+}
+
 function addCost(usage){
   if(!usage) return;
-  const p = pricing[model];
+  const p = getPricing(model);
   if(!p) return;
   const cost = (usage.input_tokens/1e6)*p.input + (usage.output_tokens/1e6)*p.output;
   sessionCost += cost;
