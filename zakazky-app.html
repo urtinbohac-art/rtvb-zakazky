@@ -17,7 +17,6 @@
   --white: #f5f3ef;
   --white-dim: rgba(245,243,239,0.65);
   --white-faint: rgba(245,243,239,0.08);
-  --white-faint2: rgba(245,243,239,0.04);
   --border: rgba(245,243,239,0.1);
   --border-strong: rgba(245,243,239,0.18);
   --success: #2ecc71;
@@ -26,93 +25,106 @@
 html,body{height:100%}
 body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--white);display:flex;flex-direction:column;height:100vh;overflow:hidden}
 
+/* LOGIN */
+.login-screen{
+  position:fixed;inset:0;z-index:100;
+  background:var(--bg);
+  display:flex;flex-direction:column;
+}
+.login-screen.hidden{display:none}
+.login-header{
+  background:var(--red);height:68px;padding:0 32px;
+  display:flex;align-items:center;flex-shrink:0;
+}
+.login-header img{height:42px;width:auto}
+.login-body{
+  flex:1;display:flex;align-items:center;justify-content:center;
+}
+.login-box{
+  width:100%;max-width:360px;padding:0 24px;
+  display:flex;flex-direction:column;gap:16px;
+}
+.login-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.4rem;font-weight:400;color:var(--white);
+  margin-bottom:4px;
+}
+.login-sub{font-size:0.72rem;color:var(--white-dim);font-weight:300;line-height:1.6}
+.login-input{
+  width:100%;background:var(--bg2);border:1px solid var(--border-strong);border-radius:6px;
+  padding:11px 14px;font-family:'Montserrat',sans-serif;font-size:0.85rem;
+  color:var(--white);outline:none;transition:border-color 0.2s;letter-spacing:0.08em;
+}
+.login-input:focus{border-color:var(--red)}
+.login-input::placeholder{color:rgba(245,243,239,0.25);letter-spacing:0}
+.login-btn{
+  width:100%;padding:11px;background:var(--red);color:var(--white);border:none;
+  border-radius:6px;font-family:'Montserrat',sans-serif;font-size:0.75rem;
+  font-weight:600;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;
+  transition:background 0.2s;
+}
+.login-btn:hover{background:var(--red-light)}
+.login-err{font-size:0.72rem;color:#e74c3c;text-align:center;min-height:18px}
+
 /* HEADER */
 header{
-  background:var(--red);
-  border-bottom:none;
-  padding:0 28px;
-  height:68px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  flex-shrink:0;
+  background:var(--red);border-bottom:none;
+  padding:0 20px 0 28px;height:68px;
+  display:flex;align-items:center;justify-content:space-between;flex-shrink:0;
 }
-
 .logo{display:flex;align-items:center;gap:18px}
 .logo-img{height:42px;width:auto;display:block}
 .logo-tag{
-  font-family:'Montserrat',sans-serif;
-  font-size:0.58rem;font-weight:600;
-  letter-spacing:0.22em;text-transform:uppercase;
-  color:rgba(255,255,255,0.45);
-  border-left:1px solid rgba(255,255,255,0.2);
-  padding-left:18px;
+  font-family:'Montserrat',sans-serif;font-size:0.58rem;font-weight:600;
+  letter-spacing:0.22em;text-transform:uppercase;color:rgba(255,255,255,0.45);
+  border-left:1px solid rgba(255,255,255,0.2);padding-left:18px;
 }
+.new-btn{
+  padding:8px 16px;border:1px solid rgba(255,255,255,0.35);background:transparent;
+  color:rgba(255,255,255,0.85);border-radius:5px;font-family:'Montserrat',sans-serif;
+  font-size:0.68rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;
+  cursor:pointer;transition:all 0.2s;white-space:nowrap;
+}
+.new-btn:hover{border-color:rgba(255,255,255,0.8);color:#fff;background:rgba(255,255,255,0.1)}
 
 /* LAYOUT */
 .app{display:flex;flex:1;overflow:hidden}
 
 /* SIDEBAR */
 .sidebar{
-  width:272px;
-  flex-shrink:0;
-  background:var(--bg2);
-  border-right:1px solid var(--border);
-  display:flex;
-  flex-direction:column;
-  overflow-y:auto;
-  scrollbar-width:none;
+  width:272px;flex-shrink:0;background:var(--bg2);border-right:1px solid var(--border);
+  display:flex;flex-direction:column;overflow-y:auto;scrollbar-width:none;
 }
 .sidebar::-webkit-scrollbar{display:none}
-
-.s-section{padding:20px 18px 0}
-.s-section:last-child{padding-bottom:20px}
-
+.s-section{padding:16px 18px 0}
+.s-section:last-child{padding-bottom:16px}
 .s-label{
-  font-size:0.58rem;
-  font-weight:600;
-  letter-spacing:0.2em;
-  text-transform:uppercase;
-  color:var(--white-dim);
-  margin-bottom:10px;
-  display:flex;align-items:center;gap:6px;
+  font-size:0.58rem;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--white-dim);margin-bottom:8px;display:flex;align-items:center;gap:6px;
 }
 .s-label::after{content:'';flex:1;height:1px;background:var(--border)}
 
-/* API */
-.api-box{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:12px}
-.api-status{display:flex;align-items:center;gap:6px;margin-bottom:8px;font-size:0.7rem;color:var(--white-dim)}
-.dot{width:5px;height:5px;border-radius:50%;background:var(--red);flex-shrink:0}
-.dot.ok{background:var(--success)}
-.api-input{
-  width:100%;background:var(--bg);border:1px solid var(--border);border-radius:4px;
-  padding:7px 10px;font-family:'Montserrat',sans-serif;font-size:0.75rem;
-  color:var(--white);outline:none;transition:border-color 0.2s;
+/* HISTORY */
+.hist-list{display:flex;flex-direction:column;gap:3px}
+.hist-empty{font-size:0.7rem;color:rgba(245,243,239,0.25);font-weight:300;padding:4px 2px;font-style:italic}
+.hist-item{
+  display:flex;align-items:center;gap:6px;padding:8px 10px;
+  background:transparent;border:1px solid transparent;border-radius:5px;
+  cursor:pointer;transition:all 0.15s;text-align:left;width:100%;
 }
-.api-input:focus{border-color:var(--red)}
-.api-input::placeholder{color:rgba(245,243,239,0.3)}
-.api-btn{
-  margin-top:8px;width:100%;padding:7px;
-  background:var(--red);color:var(--white);border:none;border-radius:4px;
-  font-family:'Montserrat',sans-serif;font-size:0.7rem;font-weight:600;
-  letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;transition:background 0.2s;
-}
-.api-btn:hover{background:var(--red-light)}
-
-/* INSTRUKCE */
-.instrukce-box{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:10px 12px;display:flex;flex-direction:column;gap:6px}
-.i-row{display:flex;align-items:center;gap:7px;font-size:0.7rem;color:var(--white-dim)}
-.i-dot{width:5px;height:5px;border-radius:50%;background:var(--border-strong);flex-shrink:0;transition:background 0.3s}
-.i-dot.loaded{background:var(--success)}
-.i-dot.error{background:var(--red)}
-.i-dot.loading{background:rgba(192,57,43,0.6);animation:blink 0.9s infinite}
-@keyframes blink{0%,100%{opacity:0.3}50%{opacity:1}}
+.hist-item:hover{background:var(--white-faint);border-color:var(--border)}
+.hist-item.active{background:var(--red-dim);border-color:var(--red)}
+.hist-info{flex:1;min-width:0}
+.hist-title{font-size:0.75rem;font-weight:500;color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hist-meta{font-size:0.62rem;color:var(--white-dim);margin-top:1px}
+.hist-rm{background:none;border:none;color:rgba(245,243,239,0.25);cursor:pointer;font-size:0.9rem;padding:2px;flex-shrink:0;transition:color 0.15s;line-height:1}
+.hist-rm:hover{color:#e74c3c}
 
 /* WORKFLOW */
 .wf-list{display:flex;flex-direction:column;gap:4px}
 .wf-btn{
   width:100%;text-align:left;background:transparent;border:1px solid transparent;
-  border-radius:5px;padding:10px 12px;cursor:pointer;transition:all 0.15s;
+  border-radius:5px;padding:9px 12px;cursor:pointer;transition:all 0.15s;
   font-family:'Montserrat',sans-serif;
 }
 .wf-btn:hover{background:var(--white-faint);border-color:var(--border)}
@@ -120,51 +132,55 @@ header{
 .wf-title{font-size:0.8rem;font-weight:500;color:var(--white);margin-bottom:2px}
 .wf-desc{font-size:0.68rem;color:var(--white-dim);font-weight:300}
 
+/* MODEL CARDS */
+.model-list{display:flex;flex-direction:column;gap:4px}
+.model-btn{
+  width:100%;text-align:left;background:transparent;border:1px solid transparent;
+  border-radius:5px;padding:9px 12px;cursor:pointer;transition:all 0.15s;
+  font-family:'Montserrat',sans-serif;
+}
+.model-btn:hover{background:var(--white-faint);border-color:var(--border)}
+.model-btn.active{background:var(--red-dim);border-color:var(--red);border-left-width:2px}
+.model-top{display:flex;align-items:center;gap:6px;margin-bottom:2px}
+.model-name{font-size:0.78rem;font-weight:500;color:var(--white)}
+.model-tag{font-size:0.56rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;padding:1px 6px;border-radius:3px;background:var(--red);color:#fff}
+.model-desc{font-size:0.66rem;color:var(--white-dim);font-weight:300}
+
 /* UPLOAD */
 .drop-zone{
-  border:1px dashed var(--border-strong);border-radius:5px;padding:16px;
+  border:1px dashed var(--border-strong);border-radius:5px;padding:14px;
   text-align:center;cursor:pointer;transition:all 0.2s;background:var(--bg3);
 }
 .drop-zone:hover,.drop-zone.over{border-color:var(--red);background:var(--red-dim)}
-.drop-icon{font-size:1.3rem;margin-bottom:6px;opacity:0.5}
+.drop-icon{font-size:1.2rem;margin-bottom:5px;opacity:0.5}
 .drop-text{font-size:0.7rem;color:var(--white-dim);font-weight:300;line-height:1.5}
-.drop-text strong{display:block;color:var(--white);font-weight:500;margin-bottom:2px;font-size:0.75rem}
+.drop-text strong{display:block;color:var(--white);font-weight:500;margin-bottom:2px;font-size:0.73rem}
 #fileInput{display:none}
-.file-list{margin-top:8px;display:flex;flex-direction:column;gap:4px}
-.file-item{display:flex;align-items:center;justify-content:space-between;padding:6px 8px;background:var(--bg3);border-radius:4px;font-size:0.7rem}
-.file-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:180px;color:var(--white-dim)}
+.file-list{margin-top:6px;display:flex;flex-direction:column;gap:3px}
+.file-item{display:flex;align-items:center;justify-content:space-between;padding:5px 8px;background:var(--bg3);border-radius:4px;font-size:0.7rem}
+.file-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px;color:var(--white-dim)}
 .file-rm{background:none;border:none;color:rgba(245,243,239,0.3);cursor:pointer;font-size:0.85rem;padding:0;transition:color 0.15s}
 .file-rm:hover{color:var(--red)}
 
-/* MODEL SELECT */
-.model-select{
-  width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:5px;
-  padding:8px 10px;font-family:'Montserrat',sans-serif;font-size:0.72rem;
-  color:var(--white);outline:none;cursor:pointer;appearance:none;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='rgba(245,243,239,0.3)'/%3E%3C/svg%3E");
-  background-repeat:no-repeat;background-position:right 10px center;
-}
-.model-select:focus{border-color:var(--red)}
-.model-select option{background:var(--bg3);color:var(--white)}
-
-/* NEW */
-.new-btn{
-  width:100%;padding:9px;border:1px solid var(--border-strong);background:transparent;
-  color:var(--white-dim);border-radius:5px;font-family:'Montserrat',sans-serif;
-  font-size:0.68rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;
-  cursor:pointer;transition:all 0.2s;
-}
-.new-btn:hover{border-color:var(--red);color:var(--red)}
+/* STATUS (dole) */
+.status-box{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:10px 12px;display:flex;flex-direction:column;gap:5px}
+.s-row{display:flex;align-items:center;gap:7px;font-size:0.68rem;color:var(--white-dim)}
+.s-dot{width:5px;height:5px;border-radius:50%;background:var(--border-strong);flex-shrink:0;transition:background 0.3s}
+.s-dot.ok{background:var(--success)}
+.s-dot.err{background:#e74c3c}
+.s-dot.loading{background:rgba(139,26,16,0.6);animation:blink 0.9s infinite}
+@keyframes blink{0%,100%{opacity:0.3}50%{opacity:1}}
 
 /* CHAT */
 .chat{flex:1;display:flex;flex-direction:column;min-width:0;background:var(--bg)}
-
 .chat-head{
   height:68px;padding:0 28px;border-bottom:1px solid var(--border);
-  display:flex;align-items:center;gap:10px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:space-between;flex-shrink:0;
 }
+.chat-head-left{display:flex;align-items:center;gap:10px}
 .ch-title{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:500;color:var(--white)}
 .ch-badge{padding:2px 9px;border:1px solid var(--border);border-radius:20px;font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--white-dim)}
+.ch-cost{font-size:0.65rem;color:var(--white-dim);font-weight:300;letter-spacing:0.04em}
 
 .messages{flex:1;overflow-y:auto;padding:24px 28px;display:flex;flex-direction:column;gap:16px;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
 .messages::-webkit-scrollbar{width:4px}
@@ -180,34 +196,19 @@ header{
 .msg{display:flex;gap:10px;max-width:800px;animation:up 0.2s ease}
 @keyframes up{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
 .msg.user{flex-direction:row-reverse;align-self:flex-end}
-
-.avatar{
-  width:28px;height:28px;border-radius:4px;display:flex;align-items:center;
-  justify-content:center;font-size:0.58rem;font-weight:600;flex-shrink:0;
-  margin-top:2px;letter-spacing:0.05em;
-}
+.avatar{width:28px;height:28px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:0.58rem;font-weight:600;flex-shrink:0;margin-top:2px;letter-spacing:0.05em}
 .avatar.ai{background:var(--red);color:var(--white)}
 .avatar.user{background:var(--bg3);color:var(--white-dim);border:1px solid var(--border)}
-
-.bubble{
-  background:var(--bg2);border:1px solid var(--border);border-radius:8px;
-  padding:12px 16px;font-size:0.82rem;line-height:1.7;color:var(--white);max-width:680px;
-}
+.bubble{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:12px 16px;font-size:0.82rem;line-height:1.7;color:var(--white);max-width:680px}
 .msg.user .bubble{background:var(--bg3);border-color:var(--border-strong)}
-
 .bubble p{margin-bottom:8px}.bubble p:last-child{margin-bottom:0}
 .bubble strong{font-weight:600;color:var(--white)}
 .bubble h1,.bubble h2,.bubble h3{font-family:'Cormorant Garamond',serif;margin:14px 0 6px;font-size:1rem;font-weight:500;color:var(--white)}
 .bubble ul,.bubble ol{padding-left:16px;margin-bottom:8px}
 .bubble li{margin-bottom:3px}
 .bubble hr{border:none;border-top:1px solid var(--border);margin:12px 0}
-
 .actions{display:flex;gap:5px;margin-top:8px}
-.copy-btn{
-  padding:3px 9px;border:1px solid var(--border);border-radius:3px;
-  background:transparent;font-family:'Montserrat',sans-serif;font-size:0.62rem;
-  font-weight:500;letter-spacing:0.06em;color:var(--white-dim);cursor:pointer;transition:all 0.15s;
-}
+.copy-btn{padding:3px 9px;border:1px solid var(--border);border-radius:3px;background:transparent;font-family:'Montserrat',sans-serif;font-size:0.62rem;font-weight:500;letter-spacing:0.06em;color:var(--white-dim);cursor:pointer;transition:all 0.15s}
 .copy-btn:hover{border-color:var(--red);color:var(--red)}
 
 /* THINKING */
@@ -219,23 +220,11 @@ header{
 
 /* INPUT */
 .input-area{padding:14px 28px 18px;border-top:1px solid var(--border);flex-shrink:0;background:var(--bg)}
-.input-wrap{
-  display:flex;gap:8px;align-items:flex-end;
-  background:var(--bg2);border:1px solid var(--border);border-radius:8px;
-  padding:8px 12px;transition:border-color 0.2s;
-}
-.input-wrap:focus-within{border-color:rgba(192,57,43,0.5)}
-#userInput{
-  flex:1;border:none;background:transparent;font-family:'Montserrat',sans-serif;
-  font-size:0.82rem;color:var(--white);outline:none;resize:none;
-  min-height:22px;max-height:110px;line-height:1.5;
-}
+.input-wrap{display:flex;gap:8px;align-items:flex-end;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:8px 12px;transition:border-color 0.2s}
+.input-wrap:focus-within{border-color:rgba(139,26,16,0.5)}
+#userInput{flex:1;border:none;background:transparent;font-family:'Montserrat',sans-serif;font-size:0.82rem;color:var(--white);outline:none;resize:none;min-height:22px;max-height:110px;line-height:1.5}
 #userInput::placeholder{color:rgba(245,243,239,0.25)}
-.send-btn{
-  width:32px;height:32px;border-radius:5px;background:var(--red);color:var(--white);
-  border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;
-  font-size:0.9rem;transition:background 0.15s;flex-shrink:0;
-}
+.send-btn{width:32px;height:32px;border-radius:5px;background:var(--red);color:var(--white);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:0.9rem;transition:background 0.15s;flex-shrink:0}
 .send-btn:hover:not(:disabled){background:var(--red-light)}
 .send-btn:disabled{opacity:0.35;cursor:default}
 .input-hint{font-size:0.6rem;color:rgba(245,243,239,0.2);margin-top:6px;text-align:center;letter-spacing:0.05em}
@@ -243,29 +232,40 @@ header{
 </head>
 <body>
 
+<!-- LOGIN -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-header">
+    <img src="https://vrzakova-bohac.cz/wp-content/uploads/2025/05/Logo-VB-WHITE-2-LINES-BGR-orez.png" alt="Vrzáková & Boháč">
+  </div>
+  <div class="login-body">
+    <div class="login-box">
+      <div>
+        <div class="login-title">Zakázky</div>
+        <div class="login-sub">Interní nástroj realitního týmu.<br>Zadejte přístupové heslo.</div>
+      </div>
+      <input class="login-input" id="loginInput" type="password" placeholder="Heslo" onkeydown="if(event.key==='Enter')doLogin()">
+      <button class="login-btn" onclick="doLogin()">Vstoupit</button>
+      <div class="login-err" id="loginErr"></div>
+    </div>
+  </div>
+</div>
+
+<!-- APP -->
 <header>
   <div class="logo">
     <img class="logo-img" src="https://vrzakova-bohac.cz/wp-content/uploads/2025/05/Logo-VB-WHITE-2-LINES-BGR-orez.png" alt="Vrzáková & Boháč">
     <span class="logo-tag">Zakázky</span>
   </div>
+  <button class="new-btn" onclick="newConv()">+ Nová zakázka</button>
 </header>
 
 <div class="app">
-  <!-- SIDEBAR -->
   <div class="sidebar">
 
     <div class="s-section">
-      <div class="s-label">Připojení</div>
-      <div class="api-box">
-        <div class="api-status"><span class="dot ok" id="apiDot"></span><span id="apiStatusText">Připojeno přes server</span></div>
-      </div>
-    </div>
-
-    <div class="s-section">
-      <div class="s-label">Instrukce</div>
-      <div class="instrukce-box">
-        <div class="i-row"><span class="i-dot loading" id="dot-inzerat"></span><span id="status-inzerat">Načítám inzerát…</span></div>
-        <div class="i-row"><span class="i-dot loading" id="dot-karta"></span><span id="status-karta">Načítám kartu…</span></div>
+      <div class="s-label">Předchozí zakázky</div>
+      <div class="hist-list" id="histList">
+        <div class="hist-empty">Zatím žádné uložené zakázky.</div>
       </div>
     </div>
 
@@ -293,9 +293,9 @@ header{
 
     <div class="s-section">
       <div class="s-label">Model</div>
-      <select class="model-select" id="modelSelect" onchange="model=this.value">
-        <option disabled selected>Načítám…</option>
-      </select>
+      <div class="model-list" id="modelList">
+        <div class="hist-empty">Načítám modely…</div>
+      </div>
     </div>
 
     <div class="s-section">
@@ -309,16 +309,23 @@ header{
     </div>
 
     <div class="s-section">
-      <button class="new-btn" onclick="newConv()">+ Nová zakázka</button>
+      <div class="s-label">Stav</div>
+      <div class="status-box">
+        <div class="s-row"><span class="s-dot ok"></span><span>Připojeno přes Cloudflare</span></div>
+        <div class="s-row"><span class="s-dot loading" id="dot-inzerat"></span><span id="status-inzerat">Načítám inzerát…</span></div>
+        <div class="s-row"><span class="s-dot loading" id="dot-karta"></span><span id="status-karta">Načítám kartu…</span></div>
+      </div>
     </div>
 
   </div>
 
-  <!-- CHAT -->
   <div class="chat">
     <div class="chat-head">
-      <div class="ch-title" id="chTitle">Inzerát</div>
-      <div class="ch-badge" id="chBadge">Sreality · Web · Facebook</div>
+      <div class="chat-head-left">
+        <div class="ch-title" id="chTitle">Inzerát</div>
+        <div class="ch-badge" id="chBadge">Sreality · Web · Facebook</div>
+      </div>
+      <div class="ch-cost" id="chCost"></div>
     </div>
 
     <div class="messages" id="messages">
@@ -342,43 +349,84 @@ header{
 <script>
 const GITHUB_BASE = 'https://raw.githubusercontent.com/urtinbohac-art/rtvb-zakazky/main/';
 const URLS = { inzerat: GITHUB_BASE+'instrukce-inzerat.md', karta: GITHUB_BASE+'instrukce-karta.md' };
-
-// ← SEM DOSAĎTE URL vašeho Cloudflare Workeru po nasazení
-// Formát: https://rtvb-zakazky.VÁŠE-JMÉNO.workers.dev
 const API_URL = 'https://rtvb-zakazky.urtin-bohac.workers.dev';
+const OPENROUTER_URL = 'https://openrouter.ai/api/v1/models';
+const CONV_KEY = 'vb_conversations';
+const AUTH_KEY = 'vb_auth';
+const MAX_CONV = 25;
 
-let apiKey = localStorage.getItem('vb_api_key')||'';
 let wf = 'inzerat';
 let model = 'claude-sonnet-4-6';
 let history = [];
 let files = [];
 let loading = false;
 let systems = { inzerat: null, karta: null };
+let pricing = {};
+let sessionCost = 0;
+let currentConvId = null;
 
 const FB = {
-  inzerat:'Jsi asistent realitního týmu Vrzáková & Boháč. Tvoříš realitní inzeráty v češtině. Délka 250–450 slov.',
-  karta:'Jsi asistent realitního týmu Vrzáková & Boháč. Tvoříš interní karty nemovitostí v češtině.'
+  inzerat: 'Jsi asistent realitního týmu Vrzáková & Boháč. Tvoříš realitní inzeráty v češtině. Délka 250–450 slov.',
+  karta:   'Jsi asistent realitního týmu Vrzáková & Boháč. Tvoříš interní karty nemovitostí v češtině.'
 };
 const WF_INFO = {
-  inzerat:{title:'Inzerát',badge:'Sreality · Web · Facebook'},
-  karta:{title:'Karta nemovitosti',badge:'Interní podklady'},
-  oba:{title:'Inzerát + Karta',badge:'Kompletní zpracování'},
-  volny:{title:'Volný dotaz',badge:'Asistent zakázky'}
+  inzerat: {title:'Inzerát',       badge:'Sreality · Web · Facebook'},
+  karta:   {title:'Karta nemovitosti', badge:'Interní podklady'},
+  oba:     {title:'Inzerát + Karta',   badge:'Kompletní zpracování'},
+  volny:   {title:'Volný dotaz',       badge:'Asistent zakázky'}
+};
+const MODEL_META = {
+  opus:    {tag:'Nejlepší',     desc:'Nejvyšší kvalita výstupů, pomalejší'},
+  sonnet:  {tag:'Doporučeno',   desc:'Nejlepší poměr kvality a ceny'},
+  haiku:   {tag:'Nejrychlejší', desc:'Rychlé odpovědi, výrazně levnější'},
 };
 
+// ── AUTH ────────────────────────────────────────────────
+function checkAuth(){
+  if(sessionStorage.getItem(AUTH_KEY)==='1'){
+    document.getElementById('loginScreen').classList.add('hidden');
+  }
+}
+
+async function doLogin(){
+  const pw = document.getElementById('loginInput').value;
+  const err = document.getElementById('loginErr');
+  if(!pw){err.textContent='Zadejte heslo.';return}
+  err.textContent='';
+  try{
+    const res = await fetch(API_URL+'/auth',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({password:pw})
+    });
+    const data = await res.json();
+    if(data.ok){
+      sessionStorage.setItem(AUTH_KEY,'1');
+      document.getElementById('loginScreen').classList.add('hidden');
+    } else {
+      err.textContent='Nesprávné heslo.';
+      document.getElementById('loginInput').value='';
+      document.getElementById('loginInput').focus();
+    }
+  }catch(e){
+    err.textContent='Chyba připojení. Zkuste znovu.';
+  }
+}
+
+// ── INSTRUKCE ───────────────────────────────────────────
 async function loadInstrukce(){
   for(const k of ['inzerat','karta']){
     const dot=document.getElementById('dot-'+k), st=document.getElementById('status-'+k);
-    dot.className='i-dot loading';
+    dot.className='s-dot loading';
     try{
       const r=await fetch(URLS[k]+'?t='+Date.now());
-      if(!r.ok)throw new Error('HTTP '+r.status);
+      if(!r.ok)throw new Error();
       systems[k]=await r.text();
-      dot.className='i-dot loaded';
+      dot.className='s-dot ok';
       st.textContent=k==='inzerat'?'✓ Inzerát načten':'✓ Karta načtena';
-    }catch(e){
+    }catch{
       systems[k]=FB[k];
-      dot.className='i-dot error';
+      dot.className='s-dot err';
       st.textContent=(k==='inzerat'?'⚠ Inzerát':'⚠ Karta')+' – záloha';
     }
   }
@@ -391,11 +439,88 @@ function getSys(){
   return 'Jsi asistent realitního týmu Vrzáková & Boháč. Pomáháš s čímkoliv k zakázce. Odpovídej v češtině, profesionálně.';
 }
 
-function setApiStatus(ok){
-  document.getElementById('apiDot').className='dot'+(ok?' ok':'');
-  document.getElementById('apiStatusText').textContent=ok?'Připojeno přes server':'Chyba připojení';
+// ── MODELY + CENY ───────────────────────────────────────
+async function loadModels(){
+  const list = document.getElementById('modelList');
+  try{
+    // Modely z Anthropic
+    const [mRes, pRes] = await Promise.all([
+      fetch(API_URL, {method:'GET'}),
+      fetch(OPENROUTER_URL)
+    ]);
+    const mData = await mRes.json();
+    const pData = await pRes.json();
+
+    // Ceník z OpenRouteru — klíčujeme bez prefixu "anthropic/"
+    const priceMap = {};
+    (pData.data||[]).forEach(m=>{
+      const id = m.id.replace('anthropic/','');
+      if(m.pricing) priceMap[id] = {
+        input:  parseFloat(m.pricing.prompt||0)*1e6,
+        output: parseFloat(m.pricing.completion||0)*1e6
+      };
+    });
+    pricing = priceMap;
+
+    // Jen Claude modely, nejnovější z každé rodiny
+    const all = (mData.data||[]).filter(m=>m.id.startsWith('claude-'));
+    const families = ['opus','sonnet','haiku'];
+    const picked = families.map(f=>all.find(m=>m.id.includes(f))).filter(Boolean);
+
+    if(!picked.length) throw new Error('no models');
+
+    list.innerHTML = picked.map(m=>{
+      const family = families.find(f=>m.id.includes(f))||'sonnet';
+      const meta = MODEL_META[family]||{tag:'',desc:''};
+      const p = priceMap[m.id];
+      const priceHint = p ? ` · $${p.input.toFixed(2)}/$${p.output.toFixed(2)} / 1M tokenů` : '';
+      const isDefault = m.id.includes('sonnet');
+      if(isDefault) model = m.id;
+      return `<button class="model-btn${isDefault?' active':''}" onclick="setModel('${m.id}',this)">
+        <div class="model-top">
+          <span class="model-name">${m.display_name||m.id}</span>
+          <span class="model-tag">${meta.tag}</span>
+        </div>
+        <div class="model-desc">${meta.desc}${priceHint}</div>
+      </button>`;
+    }).join('');
+  }catch{
+    // Záloha
+    list.innerHTML = `
+      <button class="model-btn" onclick="setModel('claude-haiku-4-5',this)">
+        <div class="model-top"><span class="model-name">Claude Haiku 4.5</span><span class="model-tag">Nejrychlejší</span></div>
+        <div class="model-desc">Rychlé odpovědi, výrazně levnější</div>
+      </button>
+      <button class="model-btn active" onclick="setModel('claude-sonnet-4-6',this)">
+        <div class="model-top"><span class="model-name">Claude Sonnet 4.6</span><span class="model-tag">Doporučeno</span></div>
+        <div class="model-desc">Nejlepší poměr kvality a ceny</div>
+      </button>
+      <button class="model-btn" onclick="setModel('claude-opus-4-5',this)">
+        <div class="model-top"><span class="model-name">Claude Opus 4.5</span><span class="model-tag">Nejlepší</span></div>
+        <div class="model-desc">Nejvyšší kvalita výstupů, pomalejší</div>
+      </button>`;
+    model='claude-sonnet-4-6';
+  }
 }
 
+function setModel(id, btn){
+  model=id;
+  document.querySelectorAll('.model-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+// ── CENA ────────────────────────────────────────────────
+function addCost(usage){
+  if(!usage) return;
+  const p = pricing[model];
+  if(!p) return;
+  const cost = (usage.input_tokens/1e6)*p.input + (usage.output_tokens/1e6)*p.output;
+  sessionCost += cost;
+  const el = document.getElementById('chCost');
+  if(sessionCost>0) el.textContent = `Relace: ~$${sessionCost.toFixed(4)}`;
+}
+
+// ── WORKFLOW ────────────────────────────────────────────
 function setWf(type,btn){
   wf=type;
   document.querySelectorAll('.wf-btn').forEach(b=>b.classList.remove('active'));
@@ -405,14 +530,16 @@ function setWf(type,btn){
   document.getElementById('chBadge').textContent=i.badge;
 }
 
+// ── SOUBORY ─────────────────────────────────────────────
 const dz=document.getElementById('dropZone');
 dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('over')});
 dz.addEventListener('dragleave',()=>dz.classList.remove('over'));
 dz.addEventListener('drop',e=>{e.preventDefault();dz.classList.remove('over');handleFiles(e.dataTransfer.files)});
 
 function toB64(f){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result.split(',')[1]);r.onerror=rej;r.readAsDataURL(f)})}
-function fmtSize(b){return b<1024?b+' B':b<1048576?(b/1024).toFixed(0)+' KB':(b/1048576).toFixed(1)+' MB'}
+function fmtSize(b){return b<1048576?(b/1024).toFixed(0)+' KB':(b/1048576).toFixed(1)+' MB'}
 function totalPayload(){return files.reduce((a,f)=>a+Math.round(f.b64.length*0.75),0)}
+
 async function handleFiles(fl){
   for(const f of fl){
     if(files.find(x=>x.name===f.name))continue;
@@ -424,42 +551,142 @@ async function handleFiles(fl){
 function renderFiles(){
   const total=totalPayload();
   const warn=total>40*1048576;
-  const sizeBar=files.length?`<div style="font-size:0.62rem;color:${warn?'var(--red-light)':'rgba(245,243,239,0.3)'};padding:4px 2px;margin-top:2px">Celkem: ${fmtSize(total)}${warn?' – blízko limitu':''}</div>`:'';
+  const sizeBar=files.length?`<div style="font-size:0.62rem;color:${warn?'#e74c3c':'rgba(245,243,239,0.3)'};padding:4px 2px;margin-top:2px">Celkem: ${fmtSize(total)}${warn?' – blízko limitu':''}</div>`:'';
   document.getElementById('fileList').innerHTML=files.map((f,i)=>`
     <div class="file-item">
       <span class="file-name" title="${f.name}">${f.name}</span>
-      <span style="font-size:0.62rem;color:var(--white-dim);flex-shrink:0;margin-right:4px">${fmtSize(f.size||Math.round(f.b64.length*0.75))}</span>
+      <span style="font-size:0.62rem;color:var(--white-dim);flex-shrink:0;margin-right:4px">${fmtSize(f.size)}</span>
       <button class="file-rm" onclick="rmFile(${i})">×</button>
     </div>`).join('')+sizeBar;
 }
 function rmFile(i){files.splice(i,1);renderFiles()}
 
-function handleKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send()}}
-function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,110)+'px'}
+// ── KONVERZACE ──────────────────────────────────────────
+function loadConvList(){
+  const convs = getConvs();
+  const list = document.getElementById('histList');
+  if(!convs.length){
+    list.innerHTML='<div class="hist-empty">Zatím žádné uložené zakázky.</div>';
+    return;
+  }
+  list.innerHTML=convs.map(c=>`
+    <button class="hist-item${c.id===currentConvId?' active':''}" onclick="restoreConv('${c.id}')">
+      <div class="hist-info">
+        <div class="hist-title">${escHtml(c.title)}</div>
+        <div class="hist-meta">${c.date} · ${WF_INFO[c.wf]?.title||c.wf}</div>
+      </div>
+      <button class="hist-rm" onclick="event.stopPropagation();deleteConv('${c.id}')" title="Smazat">×</button>
+    </button>`).join('');
+}
 
+function getConvs(){
+  try{return JSON.parse(localStorage.getItem(CONV_KEY)||'[]')}catch{return[]}
+}
+
+function saveConvs(convs){
+  localStorage.setItem(CONV_KEY, JSON.stringify(convs.slice(0,MAX_CONV)));
+}
+
+function saveCurrentConv(){
+  if(!history.length) return;
+  const convs = getConvs();
+  const title = getConvTitle();
+  const dateStr = new Date().toLocaleDateString('cs-CZ',{day:'2-digit',month:'2-digit',year:'2-digit'});
+  // strip binary content before saving
+  const safeHistory = history.map(msg=>({
+    ...msg,
+    content: typeof msg.content==='string'
+      ? msg.content
+      : msg.content.filter(b=>b.type==='text')
+  }));
+  if(currentConvId){
+    const idx = convs.findIndex(c=>c.id===currentConvId);
+    if(idx>=0){convs[idx]={...convs[idx],title,history:safeHistory,cost:sessionCost};saveConvs(convs);loadConvList();return;}
+  }
+  currentConvId = 'conv_'+Date.now();
+  convs.unshift({id:currentConvId,title,date:dateStr,wf,model,history:safeHistory,cost:sessionCost});
+  saveConvs(convs);
+  loadConvList();
+}
+
+function getConvTitle(){
+  const first = history.find(m=>m.role==='user');
+  if(!first) return 'Zakázka bez názvu';
+  const text = typeof first.content==='string'
+    ? first.content
+    : (first.content.find(b=>b.type==='text')?.text||'Zakázka');
+  return text.substring(0,48)+(text.length>48?'…':'');
+}
+
+function restoreConv(id){
+  const convs = getConvs();
+  const conv = convs.find(c=>c.id===id);
+  if(!conv) return;
+  currentConvId = id;
+  history = conv.history;
+  sessionCost = conv.cost||0;
+  wf = conv.wf||'inzerat';
+  // Update UI
+  document.querySelectorAll('.wf-btn').forEach((b,i)=>{
+    const keys=['inzerat','karta','oba','volny'];
+    b.classList.toggle('active',keys[i]===wf);
+  });
+  const info=WF_INFO[wf]||WF_INFO.inzerat;
+  document.getElementById('chTitle').textContent=info.title;
+  document.getElementById('chBadge').textContent=info.badge;
+  const costEl=document.getElementById('chCost');
+  costEl.textContent=sessionCost>0?`Relace: ~$${sessionCost.toFixed(4)}`:'';
+  // Render messages
+  const msgs=document.getElementById('messages');
+  msgs.innerHTML='';
+  history.forEach(msg=>{
+    const text=typeof msg.content==='string'?msg.content:(msg.content.find(b=>b.type==='text')?.text||'');
+    addMsg(msg.role,text,false);
+  });
+  msgs.scrollTop=msgs.scrollHeight;
+  loadConvList();
+}
+
+function deleteConv(id){
+  let convs=getConvs().filter(c=>c.id!==id);
+  saveConvs(convs);
+  if(currentConvId===id){currentConvId=null;}
+  loadConvList();
+}
+
+function escHtml(t){return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+
+// ── NOVÁ ZAKÁZKA ────────────────────────────────────────
 function newConv(){
-  history=[];files=[];renderFiles();
+  if(history.length) saveCurrentConv();
+  currentConvId=null;
+  history=[];files=[];sessionCost=0;
+  renderFiles();
+  document.getElementById('chCost').textContent='';
   document.getElementById('messages').innerHTML=`<div class="empty" id="emptyState">
     <div class="empty-icon">⌂</div>
     <div class="empty-title">Nová zakázka</div>
     <div class="empty-text">Nahrajte podklady a zahajte zpracování.</div>
   </div>`;
-  loadInstrukce();
 }
 
+// ── CHAT ────────────────────────────────────────────────
+function handleKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send()}}
+function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,110)+'px'}
+
 async function send(){
-  if(loading)return
+  if(loading) return;
   const inp=document.getElementById('userInput');
   const txt=inp.value.trim();
   const payload=totalPayload();
   if(payload>50*1048576){
-    addMsg('assistant',`⚠️ Soubory jsou příliš velké (${fmtSize(payload)}). Zkuste odebrat největší soubor nebo nahrát méně souborů najednou.`);
+    addMsg('assistant',`⚠️ Soubory jsou příliš velké (${fmtSize(payload)}). Zkuste odebrat největší soubor.`);
     return;
   }
   const content=[];
   for(const f of files){
-    if(f.type==='application/pdf')content.push({type:'document',source:{type:'base64',media_type:'application/pdf',data:f.b64}});
-    else if(f.type.startsWith('image/'))content.push({type:'image',source:{type:'base64',media_type:f.type,data:f.b64}});
+    if(f.type==='application/pdf') content.push({type:'document',source:{type:'base64',media_type:'application/pdf',data:f.b64}});
+    else if(f.type.startsWith('image/')) content.push({type:'image',source:{type:'base64',media_type:f.type,data:f.b64}});
   }
   const userText=txt||`Zpracuj přiložené podklady a vytvoř ${WF_INFO[wf].title.toLowerCase()}.`;
   content.push({type:'text',text:userText});
@@ -480,14 +707,16 @@ async function send(){
     const data=await res.json();
     const aiText=data.content.filter(b=>b.type==='text').map(b=>b.text).join('\n');
     history.push({role:'assistant',content:aiText});
+    addCost(data.usage);
     removeThinking(tid);
     addMsg('assistant',aiText);
     files=[];renderFiles();
+    saveCurrentConv();
   }catch(e){removeThinking(tid);addMsg('assistant','⚠️ Chyba: '+e.message)}
   finally{loading=false;document.getElementById('sendBtn').disabled=false}
 }
 
-function addMsg(role,text){
+function addMsg(role,text,scroll=true){
   const msgs=document.getElementById('messages');
   const d=document.createElement('div');
   d.className='msg '+role;
@@ -496,7 +725,7 @@ function addMsg(role,text){
   const act=role==='assistant'?`<div class="actions"><button class="copy-btn" onclick="copyText(this,${JSON.stringify(text)})">Kopírovat</button></div>`:'';
   d.innerHTML=`${av}<div><div class="bubble">${fmt}${act}</div></div>`;
   msgs.appendChild(d);
-  msgs.scrollTop=msgs.scrollHeight;
+  if(scroll) msgs.scrollTop=msgs.scrollHeight;
 }
 
 function formatText(t){
@@ -521,31 +750,11 @@ function showThinking(){
 }
 function removeThinking(id){document.getElementById(id)?.remove()}
 
-async function loadModels(){
-  const sel=document.getElementById('modelSelect');
-  try{
-    const res=await fetch(API_URL,{method:'GET'});
-    if(!res.ok)throw new Error('HTTP '+res.status);
-    const data=await res.json();
-    const models=(data.data||[]).filter(m=>m.id.startsWith('claude-'));
-    if(!models.length)throw new Error('empty');
-    sel.innerHTML=models.map(m=>{
-      const label=m.display_name||m.id;
-      const def=m.id.includes('sonnet');
-      return `<option value="${m.id}"${def?' selected':''}>${label}</option>`;
-    }).join('');
-    model=sel.value;
-  }catch(e){
-    sel.innerHTML=`
-      <option value="claude-sonnet-4-6" selected>Claude Sonnet 4.6</option>
-      <option value="claude-opus-4-5">Claude Opus 4.5</option>
-      <option value="claude-haiku-4-5">Claude Haiku 4.5</option>`;
-    model='claude-sonnet-4-6';
-  }
-}
-
+// ── INIT ────────────────────────────────────────────────
+checkAuth();
 loadInstrukce();
 loadModels();
+loadConvList();
 </script>
 </body>
 </html>
