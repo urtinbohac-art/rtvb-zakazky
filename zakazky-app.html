@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Vrzáková & Boháč – Zakázky</title>
+<link rel="icon" href="https://vrzakova-bohac.cz/favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
 <style>
@@ -364,6 +365,7 @@ let systems = { inzerat: null, karta: null };
 let pricing = {};
 let sessionCost = 0;
 let currentConvId = null;
+let czkRate = 23; // záloha, přepíše se z API
 
 const FB = {
   inzerat: 'Jsi asistent realitního týmu Vrzáková & Boháč. Tvoříš realitní inzeráty v češtině. Délka 250–450 slov.',
@@ -535,14 +537,27 @@ function getPricing(modelId){
   return null;
 }
 
+async function loadRate(){
+  try{
+    const res = await fetch('https://api.frankfurter.app/latest?from=USD&to=CZK');
+    const data = await res.json();
+    if(data.rates?.CZK) czkRate = data.rates.CZK;
+  }catch{ /* záloha 23 zůstává */ }
+}
+
 function addCost(usage){
   if(!usage) return;
   const p = getPricing(model);
   if(!p) return;
   const cost = (usage.input_tokens/1e6)*p.input + (usage.output_tokens/1e6)*p.output;
   sessionCost += cost;
-  const el = document.getElementById('chCost');
-  if(sessionCost>0) el.textContent = `Relace: ~$${sessionCost.toFixed(4)}`;
+  updateCostDisplay();
+}
+
+function updateCostDisplay(){
+  if(sessionCost <= 0) return;
+  const czk = (sessionCost * czkRate).toFixed(2).replace('.',',');
+  document.getElementById('chCost').textContent = `Relace: ~$${sessionCost.toFixed(4)} · ~${czk} Kč`;
 }
 
 // ── WORKFLOW ────────────────────────────────────────────
@@ -659,8 +674,7 @@ function restoreConv(id){
   const info=WF_INFO[wf]||WF_INFO.inzerat;
   document.getElementById('chTitle').textContent=info.title;
   document.getElementById('chBadge').textContent=info.badge;
-  const costEl=document.getElementById('chCost');
-  costEl.textContent=sessionCost>0?`Relace: ~$${sessionCost.toFixed(4)}`:'';
+  if(sessionCost>0) updateCostDisplay(); else document.getElementById('chCost').textContent='';
   // Render messages
   const msgs=document.getElementById('messages');
   msgs.innerHTML='';
@@ -779,6 +793,7 @@ function removeThinking(id){document.getElementById(id)?.remove()}
 checkAuth();
 loadInstrukce();
 loadModels();
+loadRate();
 loadConvList();
 </script>
 </body>
